@@ -10,6 +10,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
     return [
       '#!/bin/bash',
       'su - ubuntu',
+      `su - ubuntu -c 'mkdir "${config.input.runnerHomeDir}" && sudo mount /dev/xvdf actions-runner/'`
       `cd "${config.input.runnerHomeDir}"`,
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./run.sh'`,
