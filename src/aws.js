@@ -12,20 +12,20 @@ function buildUserDataScript(githubRegistrationToken, label) {
       'su - ubuntu',
       'whoami',
       `cd "${config.input.runnerHomeDir}"`,
-      `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}`,
-      './run.sh',
+      `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
+      `su - ubuntu -c './run.sh'`,
     ];
   } else {
     return [
       '#!/bin/bash',
       'su - ubuntu',
       'whoami',
-      'mkdir actions-runner && cd actions-runner',
-      'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}',
-      'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz',
-      'tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz',
-      `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}`,
-      './run.sh',
+      `su - ubuntu -c 'mkdir actions-runner && cd actions-runner'`,
+      `su - ubuntu -c 'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}'`,
+      `su - ubuntu -c 'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz'`,
+      `su - ubuntu -c 'tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz'`,
+      `su - ubuntu -c './config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
+      `su - ubuntu -c './run.sh'`,
     ];
   }
 }
