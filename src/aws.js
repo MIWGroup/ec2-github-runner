@@ -20,8 +20,8 @@ function buildUserDataScript(githubRegistrationToken, label) {
       'su - ubuntu',
       'whoami',
       'su - ubuntu -c "mkdir actions-runner && cd actions-runner && curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-x64-2.286.0.tar.gz && tar xzf ./actions-runner-linux-x64-2.286.0.tar.gz"',
-      `su - ubuntu -c './config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
-      "su - ubuntu -c './run.sh'",
+      `su - ubuntu -c 'cd actions-runner && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
+      "su - ubuntu -c 'cd actions-runner && ./run.sh'",
     ];
   }
 }
