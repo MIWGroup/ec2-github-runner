@@ -74,6 +74,15 @@ async function terminateEc2Instance() {
   };
 
   try {
+    if (config.input.ec2VolumeId) {
+      var volumeParams = {
+        InstanceId: ec2InstanceId, 
+        VolumeId: config.input.ec2VolumeId
+       };
+      await ec2.detachVolume(volumeParams)
+      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}`);
+
+    }
     await ec2.terminateInstances(params).promise();
     core.info(`AWS EC2 instance ${config.input.ec2InstanceId} is terminated`);
     return;
