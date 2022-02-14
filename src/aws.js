@@ -55,7 +55,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
         InstanceId: ec2InstanceId, 
         VolumeId: config.input.ec2VolumeId
        };
-      const res = await ec2.attachVolume(volumeParams)
+      const res = await ec2.attachVolume(volumeParams).promise()
       core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}`);
 
     }
