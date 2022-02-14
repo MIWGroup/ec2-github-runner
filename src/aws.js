@@ -12,7 +12,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
       'su - ubuntu',
       `cd "${config.input.runnerHomeDir}"`,
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
-      `su - ubuntu -c './run.sh'`,
+      `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./run.sh'`,
     ];
   } else {
     return [
