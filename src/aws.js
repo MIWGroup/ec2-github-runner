@@ -19,7 +19,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
     return [
       '#!/bin/bash',
       'su - ubuntu',
-      'whoami',
+      'whoamiasdasd',
       `su - ubuntu -c 'mkdir actions-runner && cd actions-runner'`,
       `su - ubuntu -c 'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}'`,
       `su - ubuntu -c 'curl -O -L https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz'`,
