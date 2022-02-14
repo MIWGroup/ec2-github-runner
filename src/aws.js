@@ -10,7 +10,6 @@ function buildUserDataScript(githubRegistrationToken, label) {
     return [
       '#!/bin/bash',
       'su - ubuntu',
-      'whoami',
       `cd "${config.input.runnerHomeDir}"`,
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
       `su - ubuntu -c './run.sh'`,
