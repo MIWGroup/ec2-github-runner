@@ -65,6 +65,10 @@ inputs:
     description: >-
       Directory that contains actions-runner software and scripts. E.g. /home/runner/actions-runner.
     required: false
+  ec2-volume-id:
+    description: >-
+      Additional volume id
+    required: false
 outputs:
   label:
     description: >-
