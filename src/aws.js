@@ -12,7 +12,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
       'su - ubuntu',
       `cd "${config.input.runnerHomeDir}"`,
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
-
+      `su - ubuntu -c './run.sh'`,
     ];
   } else {
     return [
@@ -24,7 +24,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
       "su - ubuntu -c 'curl -O -L https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-linux-${RUNNER_ARCH}-2.287.1.tar.gz'",
       "su - ubuntu -c 'tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.287.1.tar.gz'",
       `su - ubuntu -c './config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
-
+      "su - ubuntu -c './run.sh'",
     ];
   }
 }
@@ -49,7 +49,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
   try {
     const result = await ec2.runInstances(params).promise();
     const ec2InstanceId = result.Instances[0].InstanceId;
-    core.info(`AWS EC2 instance ${ec2InstanceId} is started now`);
+    core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
     return ec2InstanceId;
   } catch (error) {
     core.error('AWS EC2 instance starting error');
