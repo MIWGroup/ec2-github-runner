@@ -55,8 +55,8 @@ async function startEc2Instance(label, githubRegistrationToken) {
         InstanceId: ec2InstanceId, 
         VolumeId: config.input.ec2VolumeId
        };
-      await ec2.attachVolume(volumeParams)
-      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}`);
+      const res = await ec2.attachVolume(volumeParams)
+      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}: ${res}`);
 
     }
     return ec2InstanceId;
@@ -79,8 +79,8 @@ async function terminateEc2Instance() {
         InstanceId: ec2InstanceId, 
         VolumeId: config.input.ec2VolumeId
        };
-      res = await ec2.detachVolume(volumeParams)
-      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}: ${res}`);
+      const res = await ec2.detachVolume(volumeParams)
+      core.info(`${config.input.ec2VolumeId} detached from ${ec2InstanceId}: ${res}`);
 
     }
     await ec2.terminateInstances(params).promise();
