@@ -79,8 +79,8 @@ async function terminateEc2Instance() {
         InstanceId: ec2InstanceId, 
         VolumeId: config.input.ec2VolumeId
        };
-      await ec2.detachVolume(volumeParams)
-      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}`);
+      res = await ec2.detachVolume(volumeParams)
+      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}: ${res}`);
 
     }
     await ec2.terminateInstances(params).promise();
