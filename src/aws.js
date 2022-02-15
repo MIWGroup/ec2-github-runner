@@ -10,7 +10,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
     return [
       '#!/bin/bash',
       'su - ubuntu',
-      // `su - ubuntu -c 'sudo mkdir -p /mnt/yocto-cache/ && sudo mount /dev/nvme1n1 /mnt/yocto-cache'`,
+      `su - ubuntu -c 'sudo mkdir -p /mnt/yocto-cache/ && sudo mount /dev/nvme1n1 /mnt/yocto-cache'`,
       'su - ubuntu -c "cd actions-runner && curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-x64-2.286.0.tar.gz && tar xzf ./actions-runner-linux-x64-2.286.0.tar.gz"',
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}'`,
       `su - ubuntu -c 'cd "${config.input.runnerHomeDir}" && ./run.sh'`,
