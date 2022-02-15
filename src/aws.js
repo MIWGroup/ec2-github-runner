@@ -45,23 +45,33 @@ async function startEc2Instance(label, githubRegistrationToken) {
   };
 
   try {
-    const result = await ec2.runInstances(params).promise();
-    const ec2InstanceId = result.Instances[0].InstanceId;
-    
-    core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
-    if (config.input.ec2VolumeId) {
-      const waitParams = {
-        InstanceIds: [ec2InstanceId],
-      };
+    const waitParams = {
+      InstanceIds: [ec2InstanceId],
+    };
+    const result = await ec2.runInstances(params).promise().then(async data => {
       var volumeParams = {
         Device: "/dev/sdf", 
         InstanceId: ec2InstanceId, 
         VolumeId: config.input.ec2VolumeId
        };
-      const wres = await ec2.waitFor("instanceRunning", waitParams).promise().then(ec2.attachVolume(volumeParams).promise())
-      core.info(`${config.input.ec2VolumeId} attached to ${ec2InstanceId}`);
 
-    }
+      return await ec2.waitFor("instanceRunning", waitParams).promise()
+    });
+    const ec2InstanceId = result.Instances[0].InstanceId;
+    
+    core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
+    // if (config.input.ec2VolumeId) {
+    //   const waitParams = {
+    //     InstanceIds: [ec2InstanceId],
+    //   };
+    //   var volumeParams = {
+    //     Device: "/dev/sdf", 
+    //     InstanceId: ec2InstanceId, 
+    //     VolumeId: config.input.ec2VolumeId
+    //    };
+    //   const wres = await ec2.waitFor("instanceRunning", waitParams).promise().then(return await ec2.attachVolume(volumeParams).promise())
+      
+
     return ec2InstanceId;
   } catch (error) {
     core.error('AWS EC2 instance starting error');
