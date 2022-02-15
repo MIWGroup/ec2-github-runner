@@ -45,12 +45,15 @@ async function startEc2Instance(label, githubRegistrationToken) {
   };
 
   try {
-    const waitParams = {
-      InstanceIds: [ec2InstanceId],
-    };
+    
     const result = await ec2.runInstances(params).promise().then(async data => {
-      return await ec2.waitFor("instanceRunning", waitParams).promise()
-    }).then((wait) => {
+      const ec2InstanceId = data.Instances[0].InstanceId;
+      await ec2.waitFor("instanceRunning", waitParams).promise()
+      return ec2InstanceId
+    }).then((ec2InstanceId) => {
+      const waitParams = {
+        InstanceIds: [ec2InstanceId],
+      };
       var volumeParams = {
         Device: "/dev/sdf", 
         InstanceId: ec2InstanceId, 
@@ -59,7 +62,6 @@ async function startEc2Instance(label, githubRegistrationToken) {
       ec2.attachVolume(volumeParams).promise()
 
     });
-    const ec2InstanceId = result.Instances[0].InstanceId;
     
     core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
     // if (config.input.ec2VolumeId) {
