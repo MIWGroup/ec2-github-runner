@@ -53,7 +53,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
       };
       await ec2.waitFor("instanceRunning", waitParams).promise()
       return ec2InstanceId
-    }).then((ec2InstanceId) => {
+    }).then(async (ec2InstanceId) => {
       
       var volumeParams = {
         Device: "/dev/sdf", 
