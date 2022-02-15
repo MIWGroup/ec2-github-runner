@@ -46,7 +46,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
 
   try {
     
-    const result = await ec2.runInstances(params).promise().then(async data => {
+    const ec2InstanceId = await ec2.runInstances(params).promise().then(async data => {
       const ec2InstanceId = data.Instances[0].InstanceId;
       const waitParams = {
         InstanceIds: [ec2InstanceId],
@@ -61,7 +61,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
         VolumeId: config.input.ec2VolumeId
        };
       ec2.attachVolume(volumeParams).promise()
-
+      return ec2InstanceId
     });
     
     core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
