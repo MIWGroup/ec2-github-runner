@@ -48,6 +48,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
     
     const ec2InstanceId = await ec2.runInstances(params).promise().then(async data => {
       const ec2InstanceId = data.Instances[0].InstanceId;
+      core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
       const waitParams = {
         InstanceIds: [ec2InstanceId],
       };
@@ -65,7 +66,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
       return ec2InstanceId
     });
     
-    core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
+    
     // if (config.input.ec2VolumeId) {
     //   const waitParams = {
     //     InstanceIds: [ec2InstanceId],
@@ -99,8 +100,8 @@ async function terminateEc2Instance() {
           InstanceId: ec2InstanceId, 
           VolumeId: config.input.ec2VolumeId
          };
-        const res = await ec2.detachVolume(volumeParams).promise()
-        core.info(`${config.input.ec2VolumeId} detached from ${ec2InstanceId}: ${res}`);
+        await ec2.detachVolume(volumeParams).promise()
+        core.info(`${config.input.ec2VolumeId} detached from ${ec2InstanceId}`);
   
       }
     });
