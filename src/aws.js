@@ -93,16 +93,17 @@ async function terminateEc2Instance() {
   };
 
   try {
-    if (config.input.ec2VolumeId) {
-      var volumeParams = {
-        InstanceId: ec2InstanceId, 
-        VolumeId: config.input.ec2VolumeId
-       };
-      const res = await ec2.detachVolume(volumeParams)
-      core.info(`${config.input.ec2VolumeId} detached from ${ec2InstanceId}: ${res}`);
-
-    }
-    await ec2.terminateInstances(params).promise();
+    await ec2.terminateInstances(params).promise().then(async (data) => {
+      if (config.input.ec2VolumeId) {
+        var volumeParams = {
+          InstanceId: ec2InstanceId, 
+          VolumeId: config.input.ec2VolumeId
+         };
+        const res = await ec2.detachVolume(volumeParams).promise()
+        core.info(`${config.input.ec2VolumeId} detached from ${ec2InstanceId}: ${res}`);
+  
+      }
+    });
     core.info(`AWS EC2 instance ${config.input.ec2InstanceId} is terminated`);
     return;
   } catch (error) {
